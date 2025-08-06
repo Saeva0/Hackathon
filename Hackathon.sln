@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hackathon", "Hackathon.csproj", "{B219899F-AF81-4630-8C32-F9C4278EF23D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B219899F-AF81-4630-8C32-F9C4278EF23D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B219899F-AF81-4630-8C32-F9C4278EF23D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B219899F-AF81-4630-8C32-F9C4278EF23D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B219899F-AF81-4630-8C32-F9C4278EF23D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EFF6BDA8-988F-44E9-B00E-5A561EAC341E}
+	EndGlobalSection
+EndGlobal

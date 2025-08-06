@@ -1,0 +1,162 @@
+﻿<Window x:Class="Hackathon.Giris"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hackathon"
+        mc:Ignorable="d"
+        Title="Giriş" Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        FocusManager.FocusedElement="{Binding ElementName=txtEmail}"
+         WindowStyle="None" 
+        AllowsTransparency="True"
+         Background="Transparent"
+        Icon="/Images/logo_icon.png">
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation
+                        Storyboard.TargetProperty="Opacity"
+                        From="0.0" To="1.0" Duration="0:0:0.5" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="1.5*" />
+        </Grid.ColumnDefinitions>
+
+
+        <Border CornerRadius="10 0 0 10">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    
+                    <GradientStop Color="#1e3c72" Offset="0" />
+                    <GradientStop Color="#2a5298" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid>
+                <Canvas>
+                    
+                    <Polygon Points="0,20 230,140 0,270" Fill="#1e3c72" />
+                    <Polygon Points="100,400 200,370 180,470" Fill="#1e3c72" />
+                    <Ellipse Margin="250 450 0 0" Width="40" Height="40" Fill="#1e3c72" />
+                    <Ellipse Margin="50 400 0 0" Width="20" Height="20" Fill="#1e3c72" />
+                </Canvas>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource TitleText}" Text="Kayıt İşlemleri" />
+                    <TextBlock Text="Sadece birkaç bilginle saniyeler içinde aramıza katıl!" Opacity="0.8" Margin="20 30 20 30" Style="{StaticResource NormalText}" />
+                    <Button Content="Kaydolmak" Style="{StaticResource button}" Click="Button_Click_1" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Background="#000000" Grid.Column="1" CornerRadius="0 10 10 0" MouseDown="Border_MouseDown">
+
+            
+            <!-- YENİ: İçeriği ve butonu katmanlamak için bir Grid -->
+            <Grid>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="btnMinimize" Click="Minimize_Click" Style="{StaticResource TitleBarButtonStyle}">
+                        <Path Data="M0,8 H10" Stroke="White" StrokeThickness="1.5"/>
+                    </Button>
+                    <Button x:Name="btnMaximize" Click="Maximize_Click" Style="{StaticResource TitleBarButtonStyle}">
+                        <Path Data="M0,0 H10 V10 H0 Z" Stroke="White" StrokeThickness="1.2"/>
+                    </Button>
+                    <Button x:Name="btnClose" Click="Close_Click" Style="{StaticResource TitleBarCloseButtonStyle}">
+                        <Path Data="M0,0 L10,10 M0,10 L10,0" Stroke="White" StrokeThickness="1.5"/>
+                    </Button>
+                </StackPanel>
+
+                <!-- StackPanel -->
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Uygulamaya Giriş Yap" Foreground="#1e3c72" Style="{StaticResource TitleText}" />
+                    <StackPanel Orientation="Horizontal" Margin="0 20" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Kullanıcı adınız ve şifreniz ile giriş yapın:" Margin="0 10 0 15" Foreground="#878787" Style="{StaticResource NormalText}" />
+
+                    <!-- Kullanıcı Adı Border'ı -->
+                    <Border BorderBrush="#1e3c72" BorderThickness="1" Margin="70,10" CornerRadius="8" Background="#0D1e3c72">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="1" Opacity="0.2" />
+                        </Border.Effect>
+                        <Grid Margin="10,8">
+   
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock x:Name="textEmail" MouseDown="textEmail_MouseDown" Text="Kullanıcı Adı" 
+                                   Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,4" />
+                                <TextBox Name="txtEmail" TextChanged="txtEmail_TextChanged" 
+                                 Style="{StaticResource textBox}" Padding="6,4" BorderThickness="1" BorderBrush="#1e3c72"
+                                 Background="#E6F0F8" Foreground="#1e3c72" FontSize="14" VerticalContentAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Şifre Border'ı -->
+                    <Border BorderBrush="#1e3c72" BorderThickness="1" Margin="70,10" CornerRadius="8" Background="#0DFFFFFF">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="1" Opacity="0.2" />
+                        </Border.Effect>
+                        <Grid Margin="10,8">
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Şifre" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,4" />
+
+                              
+                                <Grid>
+                                    <PasswordBox x:Name="passwordBox" 
+                                                 PasswordChanged="passwordBox_PasswordChanged"
+                                                 Style="{StaticResource textBox}" Padding="6,4,40,4" BorderThickness="1" BorderBrush="#1e3c72"
+                                                 Background="#E6F0F8" Foreground="#1e3c72" FontSize="14" VerticalContentAlignment="Center" />
+
+                                    <TextBox x:Name="textBoxPassword" 
+                                             TextChanged="textBoxPassword_TextChanged"
+                                             Style="{StaticResource textBox}" Padding="6,4,40,4" BorderThickness="1" BorderBrush="#1e3c72"
+                                             Background="#E6F0F8" Foreground="#1e3c72" FontSize="14" VerticalContentAlignment="Center"
+                                             Visibility="Collapsed"/>
+
+                                    <Button x:Name="btnSifreGosterGizle" Click="btnSifreGosterGizle_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" Width="25" Height="25" Background="Transparent" BorderThickness="0" Cursor="Hand">
+                                        <Image x:Name="imgSifreIkon" Source="/Images/eye_icon.png" Opacity="0.5"/>
+                                    </Button>
+                                </Grid>
+
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Button Content="Giriş" Click="Button_Click" Style="{StaticResource mainButton}" Foreground="White" Width="168" />
+
+                    <Button Content="Şifremi Unuttum" 
+        Click="SifremiUnuttum_Click"
+        Foreground="#A0FFFFFF" 
+        FontSize="12"
+        Background="Transparent"
+        BorderThickness="0"
+        Cursor="Hand"
+        HorizontalAlignment="Right"
+        Margin="0,10,70,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Grid x:Name="LoadingOverlay" 
+          Background="#A0000000" 
+          Visibility="Collapsed" 
+          Grid.ColumnSpan="2" 
+          Panel.ZIndex="99">
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar IsIndeterminate="True" Width="200" Height="20" Margin="10"/>
+                <TextBlock Text="Giriş yapılıyor, lütfen bekleyin..." 
+                       Foreground="White" FontSize="18" FontWeight="SemiBold" 
+                       HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,456 @@
+﻿<Window x:Class="Hackathon.Ayarlar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hackathon"
+        mc:Ignorable="d"
+        Title="Ayarlar ve Profil Yönetimi" Height="720" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Loaded="Window_Loaded"
+        Icon="/Images/logo_icon.png">
+
+    <Window.Resources>
+
+        <CollectionViewSource x:Key="GroupedTests" Source="{Binding}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="AnaKonu"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+        
+        <!-- Sol Menü Butonları için Stil -->
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="20,0,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3DFFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="10" MouseDown="Border_MouseDown">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1e3c72" Offset="0"/>
+                <GradientStop Color="#1c1c2b" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- SOL MENÜ (NAVİGASYON) -->
+            <StackPanel Grid.Column="0" Background="#10FFFFFF">
+                <TextBlock Text="AYARLAR" Foreground="#80FFFFFF" FontSize="14" FontWeight="Bold" Margin="20,20,20,10"/>
+                <Button Content="Profilim" Style="{StaticResource NavButtonStyle}" Click="Profil_Click"/>
+                <Button Content="Geçmiş Sonuçlar" Style="{StaticResource NavButtonStyle}" Click="Gecmis_Click"/>
+                <Button Content="Hesabı Sil" Style="{StaticResource NavButtonStyle}" Click="HesapSil_Click" Foreground="#FF8A8A"/>
+
+                <Button Content="← Ana Menüye Dön" 
+                        Style="{StaticResource NavButtonStyle}" 
+                        VerticalAlignment="Bottom" 
+                        Margin="0,300,0,20" Click="AnaMenu_Click"/>
+            </StackPanel>
+
+            <Grid Grid.Column="1">
+                <!-- Sağ alanı Satırlara ayırıyoruz: Üstte Butonlar, Altta İçerik -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- PENCERE KONTROL BUTONLARI -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,5,0">
+                    <Button x:Name="btnMinimize" Click="Minimize_Click" Style="{StaticResource TitleBarButtonStyle}">
+                        <Path Data="M0,8 H10" Stroke="White" StrokeThickness="1.5"/>
+                    </Button>
+                    <Button x:Name="btnMaximize" Click="Maximize_Click" Style="{StaticResource TitleBarButtonStyle}">
+                        <Path Data="M0,0 H10 V10 H0 Z M2,2 H8 V8 H2 Z" Stroke="White" StrokeThickness="1.2"/>
+                    </Button>
+                    <Button x:Name="btnClose" Click="Close_Click" Style="{StaticResource TitleBarCloseButtonStyle}">
+                        <Path Data="M0,0 L10,10 M0,10 L10,0" Stroke="White" StrokeThickness="1.5"/>
+                    </Button>
+                </StackPanel>
+                
+                
+                <Grid Grid.Row="1" Margin="20,10,20,20">
+
+                    <!-- 1. PROFİL GÖRÜNÜMÜ -->
+                    <Grid x:Name="ProfilGrid" Visibility="Visible">
+                      
+                        <StackPanel>
+                            <TextBlock Text="Profil Bilgileri" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+                            <TextBlock Text="Hesap bilgilerinizi buradan görüntüleyebilir ve güncelleyebilirsiniz." Foreground="#A0FFFFFF" Margin="0,0,0,25"/>
+
+                            <Border BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="8" Background="#0AFFFFFF">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
+                                    <StackPanel Margin="25">
+  
+                                        <TextBlock Text="Kullanıcı Adı" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,4" />
+                                        <TextBox x:Name="txtKullaniciAdiProfil" IsReadOnly="True" Opacity="0.7"/>
+
+                                    
+                                        <TextBlock Text="E-posta Adresi" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,0"/>
+                                        <TextBox x:Name="txtEmailProfil"/>
+                            
+                                        <TextBlock Text="Yaş" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,4" />
+                                        <TextBox x:Name="txtYasProfil" PreviewTextInput="txtYas_PreviewTextInput"/>
+
+                                  
+                                        <TextBlock Text="Eğitim Düzeyi" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,4" />
+                                        <ComboBox x:Name="cmbEgitimProfil">
+                                            <ComboBoxItem Content="İlkokul" />
+                                            <ComboBoxItem Content="Ortaokul" />
+                                            <ComboBoxItem Content="Lise" />
+                                            <ComboBoxItem Content="Üniversite" />
+                                            <ComboBoxItem Content="Yüksek Lisans" />
+                                            <ComboBoxItem Content="Doktora" />
+                                        </ComboBox>
+
+                                        <!-- Öğrenim Hedefi -->
+                                        <TextBlock Text="Öğrenim Hedefiniz" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,4" />
+                                        <ComboBox x:Name="cmbHedefProfil">
+                                            <ComboBoxItem Content="Okul Sınavlarına Hazırlık"/>
+                                            <ComboBoxItem Content="Üniversite Sınavına Hazırlık (YKS, TYT, AYT)"/>
+                                            <ComboBoxItem Content="Yeni Bir Beceri Öğrenme"/>
+                                            <ComboBoxItem Content="Genel Bilgiyi Artırma"/>
+                                            <ComboBoxItem Content="İş Mülakatına Hazırlık"/>
+                                        </ComboBox>
+
+                                        <!-- Tercih Edilen Soru Türleri -->
+                                        <TextBlock Text="Tercih Ettiğiniz Soru Türleri" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,4" />
+                                        <StackPanel>
+                                            <CheckBox x:Name="chkCoktanSecmeliProfil" Content="Çoktan Seçmeli" Foreground="White" Margin="5"/>
+                                            <CheckBox x:Name="chkDogruYanlisProfil" Content="Doğru/Yanlış" Foreground="White" Margin="5"/>
+                                            <CheckBox x:Name="chkAcikUcluProfil" Content="Açık Uçlu" Foreground="White" Margin="5"/>
+                                            <CheckBox x:Name="chkKodOrnegiProfil" Content="Kod Analizi" Foreground="White" Margin="5"/>
+                                        </StackPanel>
+
+                                        <!-- Kaydet Butonu -->
+                                        <Button x:Name="btnKaydet" Content="Değişiklikleri Kaydet" Click="Kaydet_Click" HorizontalAlignment="Right" Margin="0,30,0,0" Width="200" Height="40"/>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- 2. GEÇMİŞ SONUÇLAR GÖRÜNÜMÜ -->
+                    <Grid x:Name="GecmisSonuclarGrid" Visibility="Collapsed">
+                   
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                           
+                            <RowDefinition Height="Auto"/>
+                     
+                            <RowDefinition Height="*"/>
+                         
+                        </Grid.RowDefinitions>
+
+                        
+                        <!-- BAŞLIK -->
+                        <TextBlock Grid.Row="0" Text="Geçmiş Test Sonuçları" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+
+                
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+                            <!-- Tarih Filtresi -->
+                            <StackPanel Margin="0,0,30,0">
+                                <TextBlock Text="Tarihe Göre Filtrele" Foreground="#A0FFFFFF" Margin="0,0,0,5"/>
+                                <DatePicker x:Name="dpTarihFiltre" Width="180"
+                        SelectedDateChanged="Filtre_Degisti"/>
+                            </StackPanel>
+
+                            <!-- Ders Filtresi -->
+                            <StackPanel>
+                                <TextBlock Text="Derse Göre Filtrele" Foreground="#A0FFFFFF" Margin="0,0,0,5"/>
+                                <ComboBox x:Name="cmbDersFiltre" Width="250"
+                      SelectionChanged="Filtre_Degisti">
+                               
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Filtreleri Temizle Butonu -->
+                            <Button x:Name="btnFiltreTemizle" Content="Filtreleri Temizle" 
+                Click="FiltreTemizle_Click" VerticalAlignment="Bottom" Margin="20,0,0,0" Height="30"/>
+                        </StackPanel>
+                     
+
+
+                        <!-- İÇERİK -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- SOL TARAF: Tamamlanan Testlerin Listesi -->
+                            <Border Grid.Column="0" Margin="0,0,20,0" CornerRadius="8" Background="#0AFFFFFF">
+                             
+                                <Grid>
+                                   
+                                    <ListBox x:Name="TestlerListBox" Background="Transparent" BorderThickness="0" SelectionChanged="TestlerListBox_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Source={StaticResource GroupedTests}}">
+                                        <ListBox.GroupStyle>
+                                            <GroupStyle>
+                                                <GroupStyle.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <Border Background="#18FFFFFF" Padding="10,5" Margin="0,5,0,0">
+                                                            <TextBlock Text="{Binding Name}" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </GroupStyle.HeaderTemplate>
+                                            </GroupStyle>
+                                        </ListBox.GroupStyle>
+                                     
+
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                              
+                                                <Setter Property="Padding" Value="15"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+                                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+
+                                               
+                                                <Setter Property="Margin" Value="0,-1,0,0"/>
+                                               
+
+                                                <!-- Trigger'lar ile görsel durumu kontrol etme-->
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#1AFFFFFF"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter Property="Background" Value="#3DFFFFFF"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+
+                                                <StackPanel Background="Transparent">
+                                                    <Grid>
+                                                        <TextBlock Text="{Binding TestTipi}" FontWeight="Bold" Foreground="White" FontSize="16"/>
+                                                        <TextBlock Text="{Binding TarihString, Mode=OneWay}" Foreground="#A0FFFFFF" FontSize="12" HorizontalAlignment="Right"/>
+                                                    </Grid>
+                                                    <TextBlock Text="{Binding AnaKonu, Mode=OneWay}" 
+                       Foreground="#B0FFFFFF" 
+                       FontSize="13" 
+                       FontStyle="Italic" 
+                       Margin="0,4,0,0"/>
+                                                    <TextBlock Foreground="#77FF77" Margin="0,8,0,0">
+                                   <Run Text="{Binding SkorString, Mode=OneWay}" FontWeight="SemiBold"/>
+                                   <Run Text=" Başarı" FontSize="12" Foreground="#A0FFFFFF"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <TextBlock x:Name="txtGecmisYok" Text="Henüz tamamlanmış bir test bulunmuyor." Foreground="#80FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Margin="10" Visibility="Collapsed"/>
+                                    
+                                </Grid>
+                            </Border>
+
+                         
+                            <Border Grid.Column="1" Margin="0,0,0,0" CornerRadius="8" Background="#0AFFFFFF">
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+
+                                        <RowDefinition Height="*"/>
+
+                                    </Grid.RowDefinitions>
+
+
+                                    <Button x:Name="btnGecmisTekrarTesti" 
+                Grid.Row="0"
+                Content="Bu Testteki Yanlışlardan Yeni Test Oluştur"
+                Click="GecmisTekrarTesti_Click"
+                HorizontalAlignment="Right"
+                Margin="0,10,10,10"
+                Padding="10,8"
+                Background="#e67e22"
+                Foreground="White"
+                FontWeight="Bold"
+                Visibility="Collapsed"/>
+
+                                    <Grid Grid.Row="1">
+                                        <DataGrid x:Name="TestDetayDataGrid" Background="Transparent" BorderThickness="0" CanUserAddRows="False" 
+                      IsReadOnly="True" AutoGenerateColumns="False" HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#20FFFFFF"
+                      VerticalGridLinesBrush="Transparent" RowBackground="Transparent" 
+                      AlternatingRowBackground="#08FFFFFF">
+
+                                            <!-- ... (Mevcut DataGrid.Resources ve DataGrid.Columns kodunuz hiçbir değişiklik olmadan buraya gelecek) ... -->
+                                            <DataGrid.Resources>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                    <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                                                    <Setter Property="BorderBrush" Value="#30FFFFFF"/>
+                                                    <Setter Property="Padding" Value="10,5"/>
+                                                </Style>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Foreground" Value="#D0FFFFFF"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="Padding" Value="10"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsSelected" Value="True">
+                                                            <Setter Property="Background" Value="#2AFFFFFF" />
+                                                            <Setter Property="Foreground" Value="White"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </DataGrid.Resources>
+                                            <DataGrid.Columns>
+                                                <DataGridTemplateColumn Header="Soru" Width="*">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding SoruMetni}" TextWrapping="Wrap"/>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                                <DataGridTextColumn Header="Cevabın" Binding="{Binding VerilenCevap}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Doğru Cevap" Binding="{Binding DogruCevap}" Width="Auto"/>
+                                                <DataGridTemplateColumn Header="Sonuç" Width="Auto">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock FontWeight="Bold" HorizontalAlignment="Center">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding SonucDogruMu}" Value="True">
+                                                                                <Setter Property="Text" Value="Doğru"/>
+                                                                                <Setter Property="Foreground" Value="#77FF77"/>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding SonucDogruMu}" Value="False">
+                                                                                <Setter Property="Text" Value="Yanlış"/>
+                                                                                <Setter Property="Foreground" Value="#FF7777"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+
+                                                <DataGridTemplateColumn Header="Analiz" Width="100">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button Content="Neden Yanlış?"
+                                                            x:Name="btnNedenYanlis"
+                                                            Click="btnNedenYanlis_Click"
+                                                            Cursor="Hand">
+                                                                <Button.Style>
+
+                                                                    <Style TargetType="Button" BasedOn="{StaticResource menuButton}">
+                                                                        <!-- Görsel Ayarlar -->
+                                                                        <Setter Property="Padding" Value="8,4"/>
+                                                                        <Setter Property="FontSize" Value="11"/>
+                                                                        <Setter Property="FontWeight" Value="Normal"/>
+                                                                        <Setter Property="Background" Value="#40FF9800"/>
+                                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                                        <Setter Property="BorderBrush" Value="#80FF9800"/>
+
+                                                                        <!-- Butonun sadece yanlış cevaplarda görünmesini sağlayan tetikleyici -->
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding SonucDogruMu}" Value="False">
+                                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                            </DataTrigger>
+
+                                                                            <!-- Fare üzerine geldiğinde rengi biraz daha belirginleştir -->
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#80FF9800"/>
+                                                                                <Setter Property="BorderBrush" Value="#FFFF9800"/>
+                                                                            </Trigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Button.Style>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+
+                                        <TextBlock x:Name="txtDetaySec" Text="Detayları görmek için soldaki listeden bir test seçin." 
+                       Foreground="#80FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Visible"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+
+                            <TextBlock x:Name="txtYukleniyor"
+               Text="Geçmiş Sonuçlar Yükleniyor..."
+               FontSize="22"
+               FontWeight="Bold"
+               Foreground="White"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Visibility="Collapsed" 
+               Panel.ZIndex="1" />
+
+
+                        </Grid>
+                    </Grid>
+
+                    <!-- 3. HESABI SİL GÖRÜNÜMÜ -->
+                    <Grid x:Name="HesapSilGrid" Visibility="Collapsed">
+                        <StackPanel Margin="0,0,0,20">
+                            <TextBlock Text="Hesabı Kalıcı Olarak Sil" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+                            <TextBlock Text="Bu işlem geri alınamaz. Hesabınızı sildiğinizde tüm verileriniz kalıcı olarak yok edilecektir." 
+                           Foreground="#FF8A8A" Margin="0,0,0,30" TextWrapping="Wrap"/>
+                            <Border BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="8" Background="#0AFFFFFF" Padding="25" MaxWidth="500">
+                                <StackPanel>
+                                    <TextBlock Text="Devam etmek için lütfen mevcut şifrenizi girin." Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8" />
+                                    <PasswordBox x:Name="txtSifreOnay" Height="35" FontSize="14"/>
+                                    <Button x:Name="btnHesabiSilOnay" Content="Hesabımı Kalıcı Olarak Sil" Click="HesabiSilOnay_Click" HorizontalAlignment="Stretch" Margin="0,30,0,0" Height="45" Background="#c0392b" Foreground="White" FontWeight="Bold">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5">
+                                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="Background" Value="#e74c3c"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,329 @@
+﻿<Window x:Class="Hackathon.AdminPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hackathon"
+        mc:Ignorable="d"
+        Title="Admin Paneli" Height="720" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Loaded="AdminPanel_Loaded">
+
+    <Window.Resources>
+        <Style x:Key="DarkDataGridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowBackground" Value="Transparent"/>
+            <Setter Property="AlternatingRowBackground" Value="#0AFFFFFF"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#1AFFFFFF"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="10,8"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                        <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RowStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#20FFFFFF"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Foreground" Value="#D0FFFFFF"/>
+                        <Setter Property="Padding" Value="10,8"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FF5722"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="menuButton" TargetType="Button">
+            <Setter Property="Background" Value="#FF2D3D5A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF46597A"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF5A6D8C"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Arama Kutusu için Stil -->
+        <Style x:Key="DarkTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#1AFFFFFF"/>
+            <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CaretBrush" Value="White"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#80FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Dashboard İstatistik Kartları için Stiller -->
+        <Style x:Key="StatCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#1AFFFFFF"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style x:Key="StatCardTitleStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#A0FFFFFF"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style x:Key="StatCardValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Border CornerRadius="10" BorderBrush="#80FFFFFF" BorderThickness="1">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1e3c72" Offset="0"/>
+                <GradientStop Color="#1c1c2b" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sol Menü -->
+            <Border Grid.Column="0" Background="#11FFFFFF">
+                <StackPanel Margin="10">
+                    <TextBlock Text="ADMIN PANEL" Foreground="White" FontSize="22" FontWeight="Bold" TextAlignment="Center" Margin="0,20,0,30"/>
+                    <Button x:Name="btnDashboard" Content="Genel Bakış" Style="{StaticResource menuButton}" Click="Dashboard_Click"/>
+                    <Button x:Name="btnKullaniciYonetimi" Content="Kullanıcı Yönetimi" Style="{StaticResource menuButton}" Click="KullaniciYonetimi_Click"/>
+                    <Button x:Name="btnIcerikYonetimi" Content="İçerik Yönetimi" Style="{StaticResource menuButton}" Click="IcerikYonetimi_Click"/>
+                    <Button Content="Ana Menüye Dön" VerticalAlignment="Bottom" Margin="0,50,0,0" Click="AnaMenuDon_Click" Style="{StaticResource menuButton}" Background="#80FF5722"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Sağ İçerik Alanı -->
+            <Grid Grid.Column="1" x:Name="ContentArea">
+                <Grid x:Name="DashboardGrid" Visibility="Collapsed">
+                    <StackPanel Margin="30">
+                        <TextBlock Text="Genel Bakış" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Text="Uygulamanın genel durumu ve istatistikler." Foreground="#A0FFFFFF" Margin="0,5,0,25"/>
+                        <UniformGrid Columns="5">
+                            <!-- Toplam Kullanıcı Kutusu (Mevcut) -->
+                            <Border Style="{StaticResource StatCardStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Toplam Kullanıcı" Style="{StaticResource StatCardTitleStyle}"/>
+                                    <TextBlock x:Name="txtToplamKullanici" Text="0" Style="{StaticResource StatCardValueStyle}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Toplam Soru Kutusu (Mevcut) -->
+                            <Border Style="{StaticResource StatCardStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Toplam Soru" Style="{StaticResource StatCardTitleStyle}"/>
+                                    <TextBlock x:Name="txtToplamSoru" Text="0" Style="{StaticResource StatCardValueStyle}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Toplam Cevap Kutusu (Mevcut) -->
+                            <Border Style="{StaticResource StatCardStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Çözülen Cevap Sayısı" Style="{StaticResource StatCardTitleStyle}"/>
+                                    <TextBlock x:Name="txtToplamCevap" Text="0" Style="{StaticResource StatCardValueStyle}"/>
+                                </StackPanel>
+                            </Border>
+
+
+                            <!-- Bugün Kaydolanlar Kutusu -->
+                            <Border Style="{StaticResource StatCardStyle}" Background="#1F4CAF50">
+                                <StackPanel>
+                                    <TextBlock Text="Bugün Kaydolanlar" Style="{StaticResource StatCardTitleStyle}"/>
+                                    <TextBlock x:Name="txtBugunKaydolanlar" Text="0" Style="{StaticResource StatCardValueStyle}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Bugün Çözülenler Kutusu -->
+                            <Border Style="{StaticResource StatCardStyle}" Background="#1FFF9800">
+                                <StackPanel>
+                                    <TextBlock Text="Bugün Çözülenler" Style="{StaticResource StatCardTitleStyle}"/>
+                                    <TextBlock x:Name="txtBugunCozulenler" Text="0" Style="{StaticResource StatCardValueStyle}"/>
+                                </StackPanel>
+                            </Border>
+
+                        </UniformGrid>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Kullanıcı Yönetimi Grid'i -->
+                <Grid x:Name="KullaniciYonetimiGrid" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="25,20,25,10">
+                        <TextBlock Text="Kullanıcı Yönetimi" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Text="Tüm kayıtlı kullanıcıları görüntüleyin ve yönetin." Foreground="#A0FFFFFF" Margin="0,5,0,0"/>
+                        <TextBox x:Name="txtKullaniciAra" Margin="0,20,0,0" FontSize="14" TextChanged="txtKullaniciAra_TextChanged" Style="{StaticResource DarkTextBox}"/>
+                        <TextBlock Text="Aramak için kullanıcı adı veya e-posta girin..." IsHitTestVisible="False" Foreground="#80FFFFFF" Margin="10,-30,0,0" FontSize="14">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=txtKullaniciAra}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                    <DataGrid x:Name="KullanicilarDataGrid" Grid.Row="1" Margin="20,0,20,20"
+          ItemsSource="{Binding Kullanicilar}" 
+          MouseDoubleClick="KullanicilarDataGrid_MouseDoubleClick"
+          Style="{StaticResource DarkDataGridStyle}">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#1AFFFFFF"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Padding" Value="10,8"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                                <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#20FFFFFF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Foreground" Value="#D0FFFFFF"/>
+                                <Setter Property="Padding" Value="10,8"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#FF5722"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="60"/>
+                            <DataGridTextColumn Header="Kullanıcı Adı" Binding="{Binding Ad}" Width="*"/>
+                            <DataGridTextColumn Header="E-posta" Binding="{Binding Email}" Width="2*"/>
+                            <DataGridTextColumn Header="Kayıt Tarihi" Binding="{Binding KayitTarihi, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                            <DataGridCheckBoxColumn Header="Admin?" Binding="{Binding IsAdmin}" Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!-- İçerik Yönetimi Grid'i -->
+                <Grid x:Name="IcerikYonetimiGrid" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="25,20,25,10">
+                        <TextBlock Text="İçerik Yönetimi (Soru Havuzu)" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Text="Veritabanındaki tüm soruları yönetin, hatalı olanları düzenleyin veya silin." Foreground="#A0FFFFFF" Margin="0,5,0,0"/>
+
+                        <!-- FİLTRELEME ALANI -->
+                        <Border Background="#1AFFFFFF" CornerRadius="8" Padding="10" Margin="0,20,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Filtrele:" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBox x:Name="txtSoruFiltre" Width="300" Margin="10,0,0,0" Style="{StaticResource DarkTextBox}" TextChanged="txtSoruFiltre_TextChanged"/>
+                                <Button x:Name="btnSoruSil" Content="Seçili Soruyu Sil" Margin="20,0,0,0" Style="{StaticResource menuButton}" Background="#CCF44336" Click="btnSoruSil_Click"/>
+                                </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <DataGrid x:Name="SorularDataGrid" Grid.Row="1" Margin="20,0,20,20" 
+              ItemsSource="{Binding Sorular}"
+              Style="{StaticResource DarkDataGridStyle}">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="60"/>
+                            <DataGridTextColumn Header="Ana Konu" Binding="{Binding AnaKonu}" Width="1.5*"/>
+                            <DataGridTextColumn Header="Soru Metni" Binding="{Binding SoruMetni}" Width="3*"/>
+                            <DataGridTextColumn Header="Soru Tipi" Binding="{Binding SoruTipi}" Width="*"/>
+                            <DataGridTextColumn Header="Zorluk" Binding="{Binding Zorluk}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

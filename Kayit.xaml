@@ -1,0 +1,309 @@
+﻿<Window x:Class="Hackathon.Kayit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hackathon"
+        mc:Ignorable="d"
+         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Kayıt İşlemleri" Height="750" Width="1020"
+        WindowStartupLocation="CenterScreen"
+ WindowStyle="None" 
+AllowsTransparency="True"
+         Background="Transparent"
+        Icon="/Images/logo_icon.png">
+
+    
+            <!-- Arkaplan -->
+    <Window.Resources>
+
+        <Style x:Key="AuthTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#E6F0F8"/>
+            <Setter Property="Foreground" Value="#1e3c72"/>
+            <Setter Property="BorderBrush" Value="#1e3c72"/>
+            <Setter Property="BorderThickness" Value="1"/>
+
+            <Setter Property="Padding" Value="6,4"/>
+           
+            <Setter Property="FontSize" Value="14"/>
+            
+            <Setter Property="Width" Value="420"/>
+           
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Giriş/Kayıt Ekranları İçin Ortak Şifre Kutusu Stili (AÇIK TEMA) -->
+        <Style x:Key="AuthPasswordBoxStyle" TargetType="PasswordBox">
+            <Setter Property="Background" Value="#E6F0F8"/>
+            <Setter Property="Foreground" Value="#1e3c72"/>
+            <Setter Property="BorderBrush" Value="#1e3c72"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="420"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Ders Butonları için Stil -->
+        <Style x:Key="DersButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#1AFFFFFF"/>
+            <Setter Property="BorderBrush" Value="#40FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                            <Border.Effect>
+                                <DropShadowEffect x:Name="shadow" ShadowDepth="0" Color="#4CFFFFFF" Opacity="0" BlurRadius="20"/>
+                            </Border.Effect>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                                <Image Source="{Binding IkonYolu}" Width="60" Height="60" Margin="5"/>
+                                <TextBlock Text="{Binding DersAdi}" FontSize="16" TextWrapping="Wrap" TextAlignment="Center" Margin="5,5,5,0"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#33FFFFFF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#80FFFFFF"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity" To="0.5" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#10FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Ayarlar ve Geri Butonu için Ortak Stil -->
+        <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="25">
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#22FFFFFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="1.5*" />
+        </Grid.ColumnDefinitions>
+
+        <Border CornerRadius="10 0 0 10">
+            
+            <Border.Background>
+                
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    
+                    <GradientStop Color="#1e3c72" Offset="0" />
+                    <GradientStop Color="#2a5298" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid>
+                
+                
+                <Canvas>
+                    <!-- Poligon ve elipsler de lacivert tonlarına çevrildi -->
+                    <Polygon Points="0,20 230,140 0,270" Fill="#1e3c72" />
+                    <Polygon Points="100,400 200,370 180,470" Fill="#1e3c72" />
+                    <Ellipse Margin="250 450 0 0" Width="40" Height="40" Fill="#1e3c72" />
+                    <Ellipse Margin="50 400 0 0" Width="20" Height="20" Fill="#1e3c72" />
+                </Canvas>
+
+              
+                <Button x:Name="btnGeri" 
+         Click="GeriButton_Click"
+         HorizontalAlignment="Left" 
+         VerticalAlignment="Top" 
+         Margin="50,40,0,0" 
+         Width="50" Height="50"
+         ToolTip="Giriş Ekranına Dön"
+         Cursor="Hand"
+         Style="{StaticResource IconButtonStyle}">
+                    <Image Source="/Images/left_icon.png" Margin="8"/>
+                </Button>
+                
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource TitleText}" Text="Kayıt İşlemleri" />
+                    <TextBlock Text="Hayallerini inşa etmenin ilk adımı: Kayıt olmak." Opacity="0.8" Margin="20 30 20 30" Style="{StaticResource NormalText}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+       
+        <Border Background="#000000" Grid.Column="1" CornerRadius="0 10 10 0" MouseDown="Border_MouseDown">
+
+            
+         
+            <Grid>
+
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                   
+                    <Button x:Name="btnMinimize" Click="Minimize_Click" Style="{StaticResource TitleBarButtonStyle}">
+                        <Path Data="M0,8 H10" Stroke="White" StrokeThickness="1.5"/>
+                    </Button>
+                   
+                    <Button x:Name="btnMaximize" Click="Maximize_Click" Style="{StaticResource TitleBarButtonStyle}">
+                        <Path Data="M0,0 H10 V10 H0 Z" Stroke="White" StrokeThickness="1.2"/>
+                    </Button>
+                   
+                    <Button x:Name="btnClose" Click="Close_Click" Style="{StaticResource TitleBarCloseButtonStyle}">
+                        <Path Data="M0,0 L10,10 M0,10 L10,0" Stroke="White" StrokeThickness="1.5"/>
+                    </Button>
+                </StackPanel>
+
+             
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Uygulamaya Kayıt Ol" Foreground="#1e3c72" Style="{StaticResource TitleText}" />
+                    <StackPanel Orientation="Horizontal" Margin="0 20" HorizontalAlignment="Center"/>
+
+                    <Border BorderBrush="#1e3c72" BorderThickness="1" Margin="70,10" CornerRadius="8" Background="#0D1e3c72">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="1" Opacity="0.2" />
+                        </Border.Effect>
+                       
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,5">
+                           
+                            <StackPanel Margin="10,8">
+                              
+                                <TextBlock Text="Kullanıcı Adı" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,4" />
+                              
+                                <TextBox x:Name="txtKullaniciAdi" Style="{StaticResource textBox}" Padding="6,4" BorderThickness="1" BorderBrush="#1e3c72" Background="#E6F0F8" Foreground="#1e3c72" FontSize="14" Width="420" VerticalContentAlignment="Center" />
+
+                                <TextBlock Text="E-posta Adresi" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,5,0,4" />
+                                <TextBox x:Name="txtEmail" Style="{StaticResource textBox}" Padding="6,4" BorderThickness="1" BorderBrush="#1e3c72" Background="#E6F0F8" Foreground="#1e3c72" FontSize="14" Width="420" VerticalContentAlignment="Center" />
+                                
+                                <!-- Şifre -->
+                                <TextBlock Text="Şifre" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,5,0,4" />
+                                <Grid>
+                                    <PasswordBox x:Name="passwordBox" PasswordChanged="passwordBox_PasswordChanged" Style="{StaticResource AuthPasswordBoxStyle}" Margin="10,0,0,0"/>
+                                    <TextBox x:Name="textBoxPassword" TextChanged="textBoxPassword_TextChanged" Style="{StaticResource AuthTextBoxStyle}" Visibility="Collapsed" Margin="10,0,0,0"/>
+                                </Grid>
+
+                                <CheckBox x:Name="chkSifreGoster" 
+                                          Content="Şifreleri Göster"
+                                          Foreground="White"
+                                          Margin="20,5,0,0"
+                                          Checked="SifreGoster_Checked"
+                                          Unchecked="SifreGoster_Unchecked"/>
+
+
+
+                                <!-- Şifre Tekrar -->
+                                <TextBlock Text="Şifre (Tekrar)" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,5,0,4" />
+                                <Grid>
+                                    <PasswordBox x:Name="txtSifreTekrar" Style="{StaticResource AuthPasswordBoxStyle}" Margin="10,0,0,0"/>
+                                    <TextBox x:Name="txtSifreTekrarAcik" Style="{StaticResource AuthTextBoxStyle}" Visibility="Collapsed" Margin="10,0,0,0"/>
+                                </Grid>
+                                
+                                <ProgressBar x:Name="pbSifreGucu" Height="8" Margin="21,5,11,0" Value="0" Background="#FFE0E0E0" BorderThickness="0" Maximum="5"/>
+
+                                <TextBlock x:Name="txtSifreHataMesaji" 
+           Text="Şifre en az 8 karakter, büyük/küçük harf, rakam ve özel karakter içermelidir." 
+           Foreground="#FFAAAAAA" 
+           TextWrapping="Wrap" 
+           FontSize="11" 
+           Margin="0,5,0,0"
+           Visibility="Collapsed"/>
+
+                                <!-- Yaş -->
+                                <TextBlock Text="Doğum Tarihi (GÜN/AY/YIL)" 
+           Foreground="#AAFFFFFF" 
+           FontSize="14" 
+           FontWeight="SemiBold" 
+           Margin="0,5,0,4" />
+
+                                <DatePicker x:Name="dpDogumTarihi"
+            Width="420"
+            Foreground="#1e3c72"
+            FontSize="14"
+            VerticalContentAlignment="Center"
+            Padding="6,4"
+            BorderBrush="#1e3c72"
+            BorderThickness="1"
+            Background="#E6F0F8"
+            DisplayDateEnd="{x:Static sys:DateTime.Now}"
+            Text="Lütfen doğum tarihinizi seçin...">
+                                    
+                                    <DatePicker.Resources>
+                                        <Style TargetType="DatePickerTextBox">
+                                            <Setter Property="Control.Background" Value="Transparent" />
+                                            <Setter Property="Control.BorderThickness" Value="0"/>
+                                        </Style>
+                                    </DatePicker.Resources>
+                                </DatePicker>
+                                
+                                
+                                <!-- Eğitim Düzeyi -->
+                                
+                                <TextBlock Text="Eğitim Düzeyi" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,5,0,4" />
+                                <ComboBox x:Name="cmbEgitim" Background="#E6F0F8" Foreground="#1e3c72" FontSize="14" Width="420" BorderBrush="#1e3c72" BorderThickness="1" Padding="6,4" Style="{StaticResource textBox}">
+                                    <ComboBoxItem Content="İlkokul" />
+                                    <ComboBoxItem Content="Ortaokul" />
+                                    <ComboBoxItem Content="Lise" />
+                                    <ComboBoxItem Content="Üniversite" />
+                                    <ComboBoxItem Content="Yüksek Lisans" />
+                                    <ComboBoxItem Content="Doktora" />
+                                </ComboBox>
+
+                                <!-- Öğrenim Hedefi -->
+                                <TextBlock Text="Öğrenim Hedefiniz" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,5,0,4" />
+                                <ComboBox x:Name="cmbHedef" Background="#E6F0F8" Foreground="#1e3c72" FontSize="14" Width="420" BorderBrush="#1e3c72" BorderThickness="1" Padding="6,4" Style="{StaticResource textBox}">
+                                    <ComboBoxItem Content="Okul Sınavlarına Hazırlık"/>
+                                    <ComboBoxItem Content="Üniversite Sınavına Hazırlık (YKS, TYT, AYT)"/>
+                                    <ComboBoxItem Content="Yeni Bir Beceri Öğrenme"/>
+                                    <ComboBoxItem Content="Genel Bilgiyi Artırma"/>
+                                    <ComboBoxItem Content="İş Mülakatına Hazırlık"/>
+                                </ComboBox>
+
+                                <!-- Tercih Edilen Soru Türleri -->
+                                <TextBlock Text="Tercih Ettiğiniz Soru Türleri" Foreground="#AAFFFFFF" FontSize="14" FontWeight="SemiBold" Margin="0,5,0,4" />
+                                <StackPanel Orientation="Horizontal" Width="420">
+                                    <CheckBox x:Name="chkCoktanSecmeli" Content="Çoktan Seçmeli" Foreground="White" Margin="5"/>
+                                    <CheckBox x:Name="chkDogruYanlis" Content="Doğru/Yanlış" Foreground="White" Margin="5"/>
+                                    <CheckBox x:Name="chkAcikUclu" Content="Açık Uçlu" Foreground="White" Margin="5"/>
+                                    <CheckBox x:Name="chkKodOrnegi" Content="Kod Analizi" Foreground="White" Margin="5"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+
+                    <Button Content="Kayıt" Click="Button_Click" Style="{StaticResource mainButton}" Foreground="White" Width="168" Margin="0,20,0,0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

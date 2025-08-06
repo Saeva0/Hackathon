@@ -1,0 +1,136 @@
+﻿<Window x:Class="Hackathon.KullaniciDetay"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Kullanıcı Detayları" Height="600" Width="500"
+        WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ShowInTaskbar="False">
+
+    <Window.Resources>
+        <Style x:Key="menuButton" TargetType="Button">
+            <Setter Property="Background" Value="#FF2D3D5A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF46597A"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF5A6D8C"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Diğer Stiller -->
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FF5722"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,20,0,5"/>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#A0FFFFFF"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,5,15,5"/>
+        </Style>
+        <Style x:Key="ValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="0,5,0,5"/>
+        </Style>
+        <Style x:Key="DarkCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="5,10,0,10"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="#FF1C1C2B">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Başlık Alanı -->
+        <Border Grid.Row="0" Background="#FF2D3D5A" Padding="15">
+            <StackPanel>
+                <TextBlock Text="{Binding SecilenKullanici.Ad}" Foreground="White" FontSize="24" FontWeight="Bold"/>
+                <TextBlock Text="{Binding SecilenKullanici.Email}" Foreground="#A0FFFFFF" FontSize="14"/>
+            </StackPanel>
+        </Border>
+
+        <!-- İçerik Alanı -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <!-- Profil Bilgileri -->
+                <TextBlock Text="Profil Bilgileri" Style="{StaticResource SectionHeaderStyle}"/>
+                <Border Height="1" Background="#40FFFFFF" Margin="0,0,0,10"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Kullanıcı ID:" Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SecilenKullanici.ID}" Style="{StaticResource ValueStyle}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Doğum Tarihi:" Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SecilenKullanici.DogumTarihi, StringFormat='dd MMMM yyyy'}" Style="{StaticResource ValueStyle}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Eğitim Düzeyi:" Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SecilenKullanici.EgitimDuzeyi}" Style="{StaticResource ValueStyle}"/>
+                </Grid>
+
+                <!-- Yetki ve Durum -->
+                <TextBlock Text="Yetki ve Durum" Style="{StaticResource SectionHeaderStyle}"/>
+                <Border Height="1" Background="#40FFFFFF" Margin="0,0,0,10"/>
+
+                <CheckBox x:Name="chkIsAdmin" Content="Bu kullanıcı bir Admin'dir" IsChecked="{Binding SecilenKullanici.IsAdmin}" Style="{StaticResource DarkCheckBoxStyle}"/>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Buton Alanı -->
+        <Border Grid.Row="2" Background="#11FFFFFF" Padding="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                <Button Content="Değişiklikleri Kaydet" 
+                Click="Kaydet_Click" 
+                Margin="5" 
+                Style="{StaticResource menuButton}"
+                Padding="15,8"     
+                    MinWidth="160"/>
+
+                <Button Content="İptal" 
+                Click="Iptal_Click" 
+                Margin="5" 
+                Style="{StaticResource menuButton}" 
+                Background="#40FFFFFF"
+                Padding="15,8"    
+                        MinWidth="80"/>
+                       
+
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Window>

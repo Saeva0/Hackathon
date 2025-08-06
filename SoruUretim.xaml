@@ -1,0 +1,164 @@
+﻿<Window x:Class="Hackathon.SoruUretim"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hackathon"
+        mc:Ignorable="d"
+        Title="Soru Üretim" Height="720" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+         Icon="/Images/logo_icon.png">
+
+    <Window.Resources>
+        <!-- Sayfaya özel stiller -->
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="0,20,0,8"/>
+        </Style>
+        <Style x:Key="FormLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#A0FFFFFF"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+        <!-- Ayarlar sayfasındaki buton stiline benzer bir stil -->
+        <Style x:Key="MainButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3B45DE"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="22.5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#505BFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1F2AB4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Ana Konteyner -->
+    <Border CornerRadius="10" MouseDown="TitleBar_MouseDown">
+        <Border.Background>
+
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1e3c72" Offset="0"/>
+                <GradientStop Color="#1c1c2b" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+
+        <Grid>
+            <!-- Sürükleme Alanı ve Özel Başlık Çubuğu -->
+            <Grid Height="32" VerticalAlignment="Top"/>
+           
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+              
+                <Button x:Name="btnMinimize" Click="Minimize_Click" Style="{StaticResource TitleBarButtonStyle}">
+                    <Path Data="M0,8 H10" Stroke="White" StrokeThickness="1.5"/>
+                </Button>
+                
+                <Button x:Name="btnMaximize" Click="Maximize_Click" Style="{StaticResource TitleBarButtonStyle}">
+                    <Path Data="M0,0 H10 V10 H0 Z M2,2 H8 V8 H2 Z" Stroke="White" StrokeThickness="1.2"/>
+                </Button>
+          
+                <Button x:Name="btnClose" Click="Close_Click" Style="{StaticResource TitleBarCloseButtonStyle}">
+                    <Path Data="M0,0 L10,10 M0,10 L10,0" Stroke="White" StrokeThickness="1.5"/>
+                </Button>
+            </StackPanel>
+
+            <!-- Ana İçerik -->
+            <Grid x:Name="MainContent" Margin="50,50,50,50">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel MaxWidth="700">
+                        <!-- Başlık -->
+                        <TextBlock Text="Yeni Bir Test Oluştur" FontSize="32" FontWeight="Bold" Foreground="White" />
+                        <TextBlock Text="Aşağıdaki seçenekleri belirleyerek kişiselleştirilmiş testini hazırla." Foreground="#A0FFFFFF" FontSize="18" Margin="0,5,0,25"/>
+
+                        <!-- Konu Bilgileri -->
+                        <TextBlock Text="Konu Bilgileri" Style="{StaticResource SectionHeaderStyle}"/>
+                        <TextBlock Text="Konu Başlığı" Style="{StaticResource FormLabelStyle}"/>
+                        <TextBox x:Name="txtAnaKonu" Tag="Örn: Matematik - Türev Alma Kuralları" Height="40" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Text="Öğrenme Hedefleri / Alt Konular (İsteğe Bağlı)" Style="{StaticResource FormLabelStyle}" Margin="0,15,0,5"/>
+                        <TextBox x:Name="txtAltKonular" Tag="Örn: Zincir kuralı, kapalı fonksiyonların türevi..." Height="80" TextWrapping="Wrap" AcceptsReturn="True" Padding="10"/>
+
+                        <!-- Test Ayarları -->
+                        <TextBlock Text="Test Ayarları" Style="{StaticResource SectionHeaderStyle}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <TextBlock Text="Sınav Formatı" Style="{StaticResource FormLabelStyle}"/>
+                                <ComboBox x:Name="cmbSinavTipi" Height="40" Padding="10,0,0,0" VerticalContentAlignment="Center">
+                                    <ComboBoxItem Content="Açık Uçlu"/>
+                                    <ComboBoxItem Content="Çoktan Seçmeli Test"/>
+                                    <ComboBoxItem Content="Boşluk Doldurma"/>
+                                    <ComboBoxItem Content="Doğru/Yanlış"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="5,0">
+                                <TextBlock Text="Soru Sayısı" Style="{StaticResource FormLabelStyle}"/>
+                                <StackPanel Orientation="Horizontal" Background="#1AFFFFFF" Height="40" HorizontalAlignment="Center">
+                                    <RadioButton Content="10" GroupName="SoruSayisi" IsChecked="True" Style="{StaticResource SegmentedButtonStyle}"/>
+                                    <RadioButton Content="20" GroupName="SoruSayisi" Style="{StaticResource SegmentedButtonStyle}"/>
+                                    <RadioButton Content="30" GroupName="SoruSayisi" Style="{StaticResource SegmentedButtonStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="10,0,0,0">
+                                <TextBlock Text="Zorluk Seviyesi" Style="{StaticResource FormLabelStyle}"/>
+                                <StackPanel Orientation="Horizontal" Background="#1AFFFFFF" Height="40" HorizontalAlignment="Center">
+                                    <RadioButton Content="Kolay" GroupName="Zorluk" Style="{StaticResource SegmentedButtonStyle}"/>
+                                    <RadioButton Content="Orta" GroupName="Zorluk" IsChecked="True" Style="{StaticResource SegmentedButtonStyle}"/>
+                                    <RadioButton Content="Zor" GroupName="Zorluk" Style="{StaticResource SegmentedButtonStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Grid.Column="2" Margin="0,10,0,0" Height="21">
+                            <TextBlock Text="Kapsamlı bir performans analizi ve kişisel geri bildirimlerin kilidini açmak için 30 soruluk 'Zor' seviyeyi seçin. " Style="{StaticResource FormLabelStyle}"/>
+                        </StackPanel>
+
+                        <!-- Butonlar -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                            <Button Content="← Geri" Click="Button_Geri_Click" Width="120" Background="Transparent" BorderBrush="White" BorderThickness="1" Style="{StaticResource MainButtonStyle}"/>
+                            <Button x:Name="Button_SoruOlustur" Content="Testi Oluştur" Click="Button_SoruOlustur_Click" Width="180" Style="{StaticResource MainButtonStyle}" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Yükleme Ekranı (Overlay) -->
+            <Grid x:Name="LoadingOverlay" Background="#C0000000" Visibility="Collapsed" Panel.ZIndex="99">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <ProgressBar IsIndeterminate="True" Width="200" Height="20" Margin="10"/>
+                    <TextBlock Text="Yapay zeka ile kişiselleştirilmiş sorularınız oluşturuluyor..." Foreground="White" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <TextBlock Text="İsteğinizin karmaşıklığına göre bu işlem birkaç dakika sürebilir." Foreground="#A0FFFFFF" FontSize="14" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Grid>
+            
+            
+        </Grid>
+    </Border>
+</Window>
